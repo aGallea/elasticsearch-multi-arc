@@ -1,0 +1,34 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "ignorePresets": [":semanticPrefixFixDepsChoreOthers"],
+  "printConfig": true,
+  "pre-commit": {
+    "enabled": true
+  },
+  "dependencyDashboard": true,
+  "semanticCommits": "enabled",
+  "semanticCommitType": "fix",
+  "semanticCommitScope": "deps",
+  "labels": ["dependencies"],
+  "regexManagers": [
+    {
+      "fileMatch": ["(^|/)\\.pre-commit-config\\.yaml$"],
+      "matchStrings": [
+        "\\nminimum_pre_commit_version: (?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "pre-commit",
+      "datasourceTemplate": "pypi"
+    },
+    {
+      "fileMatch": ["(^|/)\\.pre-commit-config\\.yaml$"],
+      "matchStrings": [
+        "\\n\\s*entry: (.* )?(?<depName>[^:]+):(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "git-submodules": {
+    "enabled": true
+  }
+}
