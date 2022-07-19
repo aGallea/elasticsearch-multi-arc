@@ -51,6 +51,11 @@ jobs:
               echo 'release new version to DockerHub.'
           fi
 
+      - name: Download memgraph binary
+        run: |
+          curl -L https://corretto.aws/downloads/latest/amazon-corretto-8-aarch64-linux-jdk.deb > amazon-jdk-arm64.deb
+          curl -L https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.deb > amazon-jdk-amd64.deb
+
       - name: Build & push docker images
         run: |
           docker buildx build \
