@@ -6,10 +6,11 @@ on:
       version:
         description: "Publish on DockerHub."
         required: true
-      # force_release:
-      #   type: boolean
-      #   required: false
-      #   default: false
+      force_release:
+        description: "Force release even if version already exists."
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   docker_publish:
@@ -34,25 +35,24 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # - name: Check if specified version is already pushed
-      #   run: |
-      #     EXISTS=$(docker manifest inspect $DOCKER_ORGANIZATION_NAME/$DOCKER_REPOSITORY_NAME:${{ github.event.inputs.version }} > /dev/null; echo $?)
-      #     echo $EXISTS
-      #     if [[ ${EXISTS} -eq 0 ]]; then
-      #         echo 'The specified version has been already released to DockerHub.'
-      #         if [[ ${{ github.event.inputs.force_release }} = true ]]; then
-      #           echo 'Forcing the release!'
-      #         else
-      #           echo 'Stopping the release!'
-      #           exit 1
-      #         fi
-      #     else
-      #         echo 'All good the specified version has not been release to DockerHub.'
-      #     fi
+      - name: Check if specified version is already pushed
+        run: |
+          EXISTS=$(docker manifest inspect $DOCKER_ORGANIZATION_NAME/$DOCKER_REPOSITORY_NAME:${{ github.event.inputs.version }} > /dev/null; echo $?)
+          echo $EXISTS
+          if [[ ${EXISTS} -eq 0 ]]; then
+              echo 'The specified version has been already released to DockerHub.'
+              if [[ ${{ github.event.inputs.force_release }} = true ]]; then
+                echo 'version exists, forcing release!'
+              else
+                echo 'version exists, stopping release!'
+                exit 1
+              fi
+          else
+              echo 'release new version to DockerHub.'
+          fi
 
       - name: Build & push docker images
         run: |
-          cd release/docker
           docker buildx build \
           --platform linux/amd64,linux/arm64 \
           --tag $DOCKER_ORGANIZATION_NAME/$DOCKER_REPOSITORY_NAME:${{ github.event.inputs.version }} \
