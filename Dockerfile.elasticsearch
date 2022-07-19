@@ -1,5 +1,7 @@
 FROM ubuntu:bionic-20220531
 
+ARG TARGETARCH
+
 # Must be root to install the packages
 USER root
 
@@ -17,10 +19,10 @@ RUN echo "deb [arch=amd64] https://artifacts.elastic.co/packages/6.x/apt stable 
 # update after elastic-search repo added
 RUN apt-get update
 
-# Install ARM Amazon JDK
-RUN wget https://corretto.aws/downloads/latest/amazon-corretto-8-aarch64-linux-jdk.deb -O amazon-jdk.deb
-RUN dpkg --skip-same-version -i amazon-jdk.deb
-RUN rm amazon-jdk.deb
+# Install JDK by TARGETARCH
+COPY amazon-jdk-${TARGETARCH}.deb /
+RUN dpkg --skip-same-version -i amazon-jdk-${TARGETARCH}.deb
+RUN rm amazon-jdk-${TARGETARCH}.deb
 
 # Install Elasticsearch 6.x
 RUN apt-get -y install elasticsearch
