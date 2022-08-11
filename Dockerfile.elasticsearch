@@ -31,6 +31,7 @@ RUN mkdir -p /usr/share/elasticsearch/logs
 RUN mkdir -p /usr/share/elasticsearch/data
 RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/logs
 RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+RUN chown -R elasticsearch:elasticsearch /etc/default/elasticsearch
 
 # the user was created when installed the elasticsearch
 # Must not be root:
