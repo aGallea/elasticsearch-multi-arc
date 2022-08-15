@@ -6,6 +6,11 @@ on:
       version:
         description: "Publish on DockerHub."
         required: true
+      es_version:
+        description: "Elasticsearch version."
+        type: string
+        required: false
+        default: 6.5.3
       force_release:
         description: "Force release even if version already exists."
         type: boolean
@@ -60,7 +65,8 @@ jobs:
         run: |
           docker buildx build \
           --platform linux/amd64,linux/arm64 \
+          --build-arg ES_VERSION=${{ github.event.inputs.es_version }}
           --tag $DOCKER_ORGANIZATION_NAME/$DOCKER_REPOSITORY_NAME:${{ github.event.inputs.version }} \
           --tag $DOCKER_ORGANIZATION_NAME/$DOCKER_REPOSITORY_NAME:latest \
-          --file Dockerfile.elasticsearch \
+          --file Dockerfile \
           --push .
