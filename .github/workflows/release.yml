@@ -65,7 +65,7 @@ jobs:
         run: |
           docker buildx build \
           --platform linux/amd64,linux/arm64 \
-          --build-arg ES_VERSION=${{ github.event.inputs.es_version }}
+          --build-arg ES_VERSION=${{ github.event.inputs.es_version }} \
           --tag $DOCKER_ORGANIZATION_NAME/$DOCKER_REPOSITORY_NAME:${{ github.event.inputs.version }} \
           --tag $DOCKER_ORGANIZATION_NAME/$DOCKER_REPOSITORY_NAME:latest \
           --file Dockerfile \
