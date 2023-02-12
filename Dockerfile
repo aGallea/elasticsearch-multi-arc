@@ -12,7 +12,8 @@ RUN apt update
 RUN apt install -y curl nano
 
 # Download elasticsearch
-RUN curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.tar.gz
+#RUN curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ES_VERSION.tar.gz
+RUN curl -L -O https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.6.0.tar.gz
 RUN tar -xvf elasticsearch-$ES_VERSION.tar.gz
 RUN rm -f elasticsearch-$ES_VERSION.tar.gz
 RUN mv elasticsearch-$ES_VERSION elasticsearch
